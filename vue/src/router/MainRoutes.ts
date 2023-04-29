@@ -6,11 +6,11 @@ const MainRoutes = {
     redirect: '/main',
     component: () => import('@/layouts/full/FullLayout.vue'),
     children: [
-        {
-            name: 'Dashboard',
-            path: '/',
-            component: () => import('@/views/dashboard/index.vue')
-        },
+        // {
+        //     name: 'Dashboard',
+        //     path: '/',
+        //     component: () => import('@/views/dashboard/index.vue')
+        // },
         {
             name: 'Typography',
             path: '/ui/typography',
@@ -40,6 +40,11 @@ const MainRoutes = {
             name: 'EventManagement',
             path: '/event/:id',
             component: () => import('@/views/event/Event.vue')
+        },
+        {
+            name: 'JudgeEvent',
+            path: '/judge',
+            component: () => import('@/views/judge/MyEvent.vue')
         },
     ]
 };

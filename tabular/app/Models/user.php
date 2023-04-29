@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Enums\RoleEnum;
 
 use App\Models\Role;
+use App\Models\Event;
 
 class user extends Model
 {
@@ -18,6 +19,11 @@ class user extends Model
 
     public function role()
     {
-        return $this->hasOne(Role::class, 'role_id', 'id');
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+    public function event()
+    {
+        return $this->hasOne(Event::class, 'id', 'event_id');
     }
 }

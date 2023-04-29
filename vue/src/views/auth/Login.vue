@@ -2,6 +2,21 @@
 import Logo from '@/layouts/full/logo/Logo.vue';
 /* Login form */
 import LoginForm from '@/components/auth/LoginForm.vue';
+
+import { authStore } from '@/stores/auth/auth';
+import { storeToRefs } from 'pinia';
+
+const useAuthStore = authStore();
+const { signIn } = useAuthStore;
+const { userAccount } = storeToRefs(useAuthStore);
+
+const logIn = async (password: string) => {
+    const data = await signIn(password);
+    if(data.role.role === 'Judge') return window.location.assign("/judge");
+    if(data.role.role === 'Admin') return window.location.assign("/event");
+    // console.log(password)
+    }
+    // console.log(userAccount)
 </script>
 <template>
     <div class="authentication">
@@ -13,13 +28,16 @@ import LoginForm from '@/components/auth/LoginForm.vue';
                             <div class="d-flex justify-center py-4">
                                 <Logo />
                             </div>
-                            <div class="text-body-1 text-muted text-center mb-3">Your Social Campaigns</div>
-                            <LoginForm />
+                            <!-- <div class="text-body-1 text-muted text-center mb-3">Your Social Campaigns</div> -->
+                            <LoginForm @logIn="logIn" />
                             <h6 class="text-h6 text-muted font-weight-medium d-flex justify-center align-center mt-3">
                                 New to Modernize?
-                                <RouterLink to="/auth/register"
-                                    class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium pl-2">
-                                    Create an account</RouterLink>
+                                <RouterLink
+                                    to="/auth/register"
+                                    class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium pl-2"
+                                >
+                                    Create an account</RouterLink
+                                >
                             </h6>
                         </v-card-item>
                     </v-card>

@@ -5,6 +5,8 @@ import { storeToRefs } from 'pinia';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 import ParticipantsView from '@/views/event/components/participants/ParticipantsView.vue';
 import UsersView from './components/users/UsersView.vue';
+import CriteriaView from './components/criteria/CriteriaView.vue';
+import ScoreBoard from './components/score-board/ScoreBoard.vue';
 import { useRoute } from 'vue-router';
 
 onMounted(async () => {
@@ -38,7 +40,8 @@ let tabs = ref(null);
                 <v-window v-model="tabs">
                     <v-window-item value="score-board">
                         <v-card>
-                            <v-card-text>score-board</v-card-text>
+                            <!-- <v-card-text>score-board</v-card-text> -->
+                            <ScoreBoard :criterias="event?.criterias"/>
                         </v-card>
                     </v-window-item>
                     <v-window-item value="participants">
@@ -46,12 +49,12 @@ let tabs = ref(null);
                     </v-window-item>
                     <v-window-item value="users">
                         <v-card>
-                            <UsersView />
+                            <UsersView/>
                         </v-card>
                     </v-window-item>
                     <v-window-item value="criteria">
                         <v-card>
-                            <v-card-text>criteria</v-card-text>
+                            <CriteriaView :criterias="event?.criterias"/>
                         </v-card>
                     </v-window-item>
                 </v-window>

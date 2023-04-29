@@ -9,6 +9,6 @@ class RoleRepository implements IRole
 {
     public function fetchRoles()
     {
-        return Role::all();
+        return Role::where('role', '!=', 'Admin')->get();
     }
 }

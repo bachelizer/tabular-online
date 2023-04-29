@@ -20,6 +20,11 @@ class EventController extends Controller
         return $this->eventRepository->fetchEvents();
     }
 
+    public function fetch($isActive)
+    {
+        return $this->eventRepository->fetchEventsActive($isActive);
+    }
+
     public function store(Request $request)
     {
         $store = $this->eventRepository->createEvent($request);
@@ -29,7 +34,7 @@ class EventController extends Controller
         ], $store ? 200 : 500);
     }
 
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
         $this->eventRepository->updateEvent($request, $id);
     }

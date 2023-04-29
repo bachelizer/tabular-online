@@ -38,7 +38,7 @@ const sDrawer = ref(true);
                 </template>
             </v-list>
             <div class="pa-4">
-                <ExtraBox />
+                <!-- <ExtraBox /> -->
             </div>
         </perfect-scrollbar>
     </div>
@@ -57,7 +57,7 @@ const sDrawer = ref(true);
             </div>
             <div>
                 <!-- Upgrade button -->
-                <v-btn class="mr-2 bg-primary" href="https://adminmart.com/templates/vuejs/?product_sortby=free" target="_blank">Download Free</v-btn>
+                <!-- <v-btn class="mr-2 bg-primary" href="https://adminmart.com/templates/vuejs/?product_sortby=free" target="_blank">Download Free</v-btn> -->
                 <!-- User Profile -->
                 <ProfileDD />
             </div>

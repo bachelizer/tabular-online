@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 import event from '../../helper/api/services/event.services';
-import type { Event } from './interface/event.interface';
+import type { Event, EventRequest } from './interface/event.interface';
 
 export const eventStore = defineStore('eventStore', {
     state: () => {
@@ -11,6 +11,10 @@ export const eventStore = defineStore('eventStore', {
         };
     },
     actions: {
+        async fetchEventsActive() {
+            const { data } = await event.fetchEventsActive(true);
+            this.events = data;
+        },
         async fetchEvents() {
             const { data } = await event.fetchEvents();
             this.events = data;
@@ -22,6 +26,9 @@ export const eventStore = defineStore('eventStore', {
         async getEvent(id: number) {
             const { data } = await event.getEvent(id)
             this.event = data;
+        },
+        async updateEvent(payload: EventRequest) {
+            await event.updateEvent(payload)
         }
     },
     getters: {}

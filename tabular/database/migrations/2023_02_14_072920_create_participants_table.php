@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('participants', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('screen_name', 20)->nullable();
             $table->string('full_name', 50);
             $table->tinyInteger('number')->nullable();

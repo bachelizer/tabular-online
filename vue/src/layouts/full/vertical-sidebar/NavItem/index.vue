@@ -1,13 +1,18 @@
 <script setup>
 import Icon from '../Icon.vue';
+import { authStore } from '@/stores/auth/auth';
 
+const useAuthStore = authStore();
+const { userAccount } = useAuthStore;
 const props = defineProps({ item: Object, level: Number });
 </script>
 
 <template>
     <!---Single Item-->
+    <!-- v-if="user.role.role === item.userRole" -->
     <v-list-item
         :to="item.to"
+        v-if="userAccount.role.role === item.userRole"
         rounded
         class="mb-1"
         active-color="primary"

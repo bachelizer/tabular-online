@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('criterias', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedInteger('event_id');
             $table->string('criteria', 100);
             $table->integer('percentage');

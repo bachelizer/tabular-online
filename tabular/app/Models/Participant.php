@@ -11,7 +11,7 @@ class Participant extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = ['screen_name', 'full_name', 'number', 'event_id'];
+    protected $fillable = ['screen_name', 'full_name','gender', 'number', 'event_id'];
 
     public function scores()
     {

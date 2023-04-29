@@ -7,6 +7,11 @@ use App\Models\Criteria;
 
 class CriteriaRepository implements ICriteria
 {
+    public function fetchEventCriteria($eventId)
+    {
+        return Criteria::where('event_id', '=', $eventId)->get();
+    }
+
     public function createCriteria($criteriaDetails)
     {
         $criteria = new Criteria([
@@ -28,8 +33,9 @@ class CriteriaRepository implements ICriteria
         $criteria->save();
     }
 
-    public function removeCriteria($criteria)
+    public function removeCriteria($id)
     {
+        $criteria =  Criteria::find($id);
         $criteria->delete();
     }
 }

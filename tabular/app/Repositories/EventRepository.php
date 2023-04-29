@@ -7,6 +7,11 @@ use App\Models\Event;
 
 class EventRepository implements IEvent
 {
+    public function fetchEventsActive($isActive)
+    {
+        return Event::where('is_active', '=', 1)->get();
+    }
+
     public function fetchEvents()
     {
         return Event::all();

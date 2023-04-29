@@ -14,6 +14,11 @@ class ParticipantController extends Controller
         $this->participantRepository = $participantRepository;
     }
 
+    public function index($eventId)
+    {
+        return $this->participantRepository->fetchEventParticipant($eventId);
+    }
+    
     public function store(Request $request)
     {
         $participant = $this->participantRepository->createParticipant($request);

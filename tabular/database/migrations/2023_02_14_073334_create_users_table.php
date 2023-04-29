@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('password', 30);
             $table->unsignedInteger('event_id');
             $table->unsignedInteger('role_id');
             $table->string('full_name', 50);
             $table->string('screen_name', 50)->nullable();
 
-            $table->foreign('event_id')->references('id')->on('events');
-            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
