@@ -22,7 +22,8 @@ class EventRepository implements IEvent
         try{
             $event = new Event([
                 'event_name' => $eventDetails->get('event_name'),
-                'date' => $eventDetails->get('date')
+                'date' => $eventDetails->get('date'),
+                'is_active' => $eventDetails->get('is_active')
             ]);
 
             $event->save();

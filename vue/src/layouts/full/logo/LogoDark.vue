@@ -1,6 +1,6 @@
 <template>
     <div class="logo">
-        <span>Tabular</span>
+        <span style="text-align: center !important;">ETS</span>
         <!-- <RouterLink to="/">
             <svg width="174" height="26" viewBox="0 0 174 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path

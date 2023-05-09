@@ -32,9 +32,10 @@ export const scoreStore = defineStore('scoreStore', {
             // const { data } = await score.getParticipantsTotalScore(eventId)
             const scores = await score.getParticipantsTotalScore(eventId)
             const part = await participant.fetchEventParticipants(eventId);
-            const r = merge.participantsAndScore(part.data, scores.data)   
+            const r = await merge.participantsAndScore(part.data, scores.data)   
             // this.participantScore = data
             this.normalizeParticipant = r
+            console.log(scores)
         },
         async fetchEventParticipants(eventId: number) {
             const { data } = await participant.fetchEventParticipants(eventId);

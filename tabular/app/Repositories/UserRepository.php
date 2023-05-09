@@ -50,4 +50,12 @@ class UserRepository implements IUser
         $participant = User::find($id);
         $participant->delete();
     }
+
+    public function getUserDetails($id)
+    {
+        $user = User::where('id','=',$id)->first();
+        $user->role;
+        $user->event;
+        return $user;
+    }
 }

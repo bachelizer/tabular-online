@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, toRaw } from 'vue';
+import { toRefs } from '@vue/reactivity';
 import type { CriteriaRequest } from '@/stores/criteria/interface/criteria.interface';
 
 const emit = defineEmits<{
@@ -15,13 +16,13 @@ interface Props {
 // let payload = reactive({} as CriteriaRequest);
 const props = defineProps<Props>();
 
-let payload = reactive({} as CriteriaRequest);
+let payload = reactive(toRaw(props.payload)) as CriteriaRequest ;
 
 let showBtnSave = ref(props.action === "create");
 
 let showBtnPencil = ref(props.action === "create");
 
-let req = reactive(props.payload)
+let req = reactive(payload)
 
 const submitHandler = () => {
     emit('submit', req, props.action)
@@ -41,10 +42,10 @@ const submitHandler = () => {
                     <v-container>
                         <v-row>
                             <v-col cols="10" sm="8" md="8">
-                                <v-text-field label="Criteria Description" :readonly="!showBtnSave" v-model="props.payload.criteria" required></v-text-field>
+                                <v-text-field label="Criteria Description" :readonly="!showBtnSave" v-model="payload.criteria" required></v-text-field>
                             </v-col>
                             <v-col cols="2" sm="4" md="4">
-                                <v-text-field label="Percentage: % out 0f 100" :readonly="!showBtnSave" v-model="props.payload.percentage" required></v-text-field>
+                                <v-text-field label="Percentage: % out 0f 100" :readonly="!showBtnSave" v-model="payload.percentage" required></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>

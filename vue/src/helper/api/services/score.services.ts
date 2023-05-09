@@ -10,5 +10,5 @@ const getParticipantsTotalScore = (eventId : number) => api.get(`/api/score/even
 export default {
     createScore,
     getParticipantScore,
-    getParticipantsTotalScore
+    getParticipantsTotalScore,
 };

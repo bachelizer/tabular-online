@@ -61,3 +61,5 @@ Route::post('/auth', [AuthController::class, 'signIn']);
 // report
 Route::post('/report/{eventId}', [ReportController::class, 'getScores']);
 Route::post('/report/judges-scoring/{eventId}', [ReportController::class, 'getScoringJudge']);
+Route::get('/report/individual-scoring/{eventId}/{userId}', [ReportController::class, 'individualJudgeScoring']);
+Route::get('/report/score-summary/{eventId}', [ReportController::class, 'scoreSummary']);

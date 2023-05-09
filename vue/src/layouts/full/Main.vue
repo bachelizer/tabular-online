@@ -53,7 +53,10 @@ const sDrawer = ref(true);
                     <Menu2Icon size="20" stroke-width="1.5" />
                 </v-btn>
                 <!-- Notification -->
-                <NotificationDD />
+                <div class="ml-5">
+                    <h2> ASSCAT Web-based Event Tabulation System</h2>
+                </div>
+                <!-- <NotificationDD /> -->
             </div>
             <div>
                 <!-- Upgrade button -->

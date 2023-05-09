@@ -59,4 +59,25 @@ class ReportController extends Controller
         return $pdf->download('tabulator_judges_scoring.pdf');
         // return $users;
     }
+
+    public function individualJudgeScoring($eventId, $userId)
+    {
+        $data = $this->reportRepository->individualJudgeScoring($eventId, $userId);
+        $event = $this->eventRepository->showEvent($eventId);
+        $criteria = $this->criteriaRepository->fetchEventCriteria($eventId);
+        $user = $this->userRepository->getUserDetails($userId);
+        $pdf = PDF::loadView('reports/individual-scoring', array('participants' => $data, 'event' => $event, 'criteria' => $criteria, 'user' =>  $user));
+        return $pdf->download('individual_scoring_'.$userId.'.pdf');
+        // return $user;
+    }
+
+    public function scoreSummary($eventId)
+    {
+        $data = $this->reportRepository->scoreSummary($eventId);
+        $event = $this->eventRepository->showEvent($eventId);
+        $users = $this->reportRepository->fetchEventUser($eventId);
+        $pdf = PDF::loadView('reports/score-summary', array('participants' => $data, 'event' => $event, 'users' =>  $users));
+        return $pdf->download('score_summary.pdf');
+        // return $data;
+    }
 }

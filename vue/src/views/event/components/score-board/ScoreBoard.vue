@@ -6,16 +6,19 @@ import { scoreStore } from '@/stores/score/score';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 import type { Criteria } from '@/stores/criteria/interface/criteria.interface';
-import merge from '@/helper/util/merge'
+// import merge from '@/helper/util/merge'
 import { reportStore } from '@/stores/report/report';
+import { userStore } from '@/stores/user/user';
 
 const useParticipantStore = participantStore();
 const useScoreStore = scoreStore();
 const useReportStore = reportStore();
+const useUserStore = userStore();
 const { getParticipantsTotalScore, fetchEventParticipants } = useScoreStore
 const { participants } = storeToRefs(useParticipantStore);
 const { participantScore, normalizeParticipant } = storeToRefs(useScoreStore);
-const { generateFinalPdf, generateJudgesScoring } = useReportStore;
+const { scoreSummary, generateJudgesScoring, individualScoring } = useReportStore;
+const { fetchEventUser } = useUserStore;
 
 interface Props {
     criterias: Criteria[];
@@ -31,12 +34,15 @@ const normalize = () => {
 };
 
 const generateFinalResult = () => {
-    generateFinalPdf(normalizeParticipant.value, Number(eventId.value));
+    // generateFinalPdf(normalizeParticipant.value, Number(eventId.value));
     // console.log(normalizeParticipant.value)
+    scoreSummary(Number(eventId.value));
 }
 
-const generateJudgesScoringResult = () => {
-    generateJudgesScoring(Number(eventId.value))
+const generateJudgesScoringResult = async () => {
+    await fetchEventUser(Number(eventId.value));
+    // generateJudgesScoring(Number(eventId.value))
+    individualScoring(Number(eventId.value));
 }
 
 onMounted(async () => {

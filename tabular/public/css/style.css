@@ -42,6 +42,10 @@ th,
 .mt-20 {
     margin-top: 20px;
 }
+
+.mt-40 {
+    margin-top: 40px;
+}
 .mb-10 {
     margin-bottom: 10px;
 }
@@ -84,4 +88,21 @@ textarea {
 
 .font-14 {
     font-size: 20px;
+}
+
+.iso-logo img {
+    float: right;
+    margin-top: -30px;
+    width: 80px;height: auto;
+    border: 1px cyan solid;
+    padding: 4px;
+}
+
+footer {
+    /* width: 100vw;
+     */
+    margin-bottom: 2.5rem;
+    width: 92%;
+    position: absolute;
+    bottom: 10;
 }

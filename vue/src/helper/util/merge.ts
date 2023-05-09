@@ -1,4 +1,4 @@
-const groupBy = (
+/* const groupBy = (
     inputArray,
     key,
     removeKey = false,
@@ -27,7 +27,7 @@ const groupBy = (
     );
   };
 
-const participantsAndScore = (participant: any, score: any) => {
+const participantsAndScore = async (participant: any, score: any) => {
     const scores = groupBy(score, 'participant_id', true);
     let arr = [];
     for (let i = 0; i < participant.length; i++) {
@@ -44,6 +44,33 @@ const participantsAndScore = (participant: any, score: any) => {
         }
     }
     return arr;
+}; */
+const groupBy = (inputArray, key, removeKey = false) => {
+  return inputArray.reduce((previous, current) => {
+    const keyValue = current[key];
+    if (removeKey) delete current[key];
+    return {
+      ...previous,
+      [keyValue]: [...(previous[keyValue] || []), current],
+    };
+  }, {});
+};
+
+const participantsAndScore = async (participant: any, score: any) => {
+  const scores = groupBy(score, 'participant_id', true);
+  let arr = [];
+  for (let i = 0; i < participant.length; i++) {
+      let participant_id = participant[i].id;
+      for (const [key, value] of Object.entries(scores)) {
+        if (participant_id === parseInt(key, 10)) {
+          arr.push({
+            ...participant[i],
+            percent_score: value,
+          });
+        }
+      }
+  }
+  return arr;
 };
 
 export default {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref, computed } from 'vue';
 import type { ScoreRequest, Score } from '@/stores/score/interface/score.interface';
 import { criteriaStore } from '@/stores/criteria/criteria';
 import { scoreStore } from '@/stores/score/score';
@@ -29,6 +29,8 @@ interface Props {
     userId: number;
 }
 
+let notify = ref(false)
+
 const props = defineProps<Props>();
 
 let payload = reactive({} as ScoreRequest);
@@ -37,6 +39,7 @@ const submitHandler = () => {
 };
 
 const saveScore = async (participantId: number, criteriaId: number, score: number, userId: number, eventId: number) => {
+    notify.value = true
     const data: ScoreRequest = {
         participant_id: participantId,
         criteria_id: criteriaId,
@@ -45,19 +48,25 @@ const saveScore = async (participantId: number, criteriaId: number, score: numbe
         event_id: eventId
     };
     await createScore(data);
-    emit('close')
+    setTimeout(() => { notify.value = false }, 2000)
+    // emit('close')
 };
 
 const addTheScore = () => {
     criterias.value.forEach((element, i) => {
-        element.score = 0
-        scores.value.forEach(e => {
-            if(element.id === e.criteria_id) {
-                element.score = e.score
+        element.score = '';
+        scores.value.forEach((e) => {
+            if (element.id === e.criteria_id) {
+                element.score = e.score;
             }
-        })
+        });
     });
+};
+
+const scoreRaw = (data: any) => {
+    return data ? data :'';
 }
+
 </script>
 
 <template>
@@ -88,6 +97,10 @@ const addTheScore = () => {
                                 >
                             </v-col>
                         </v-row>
+                        <div style="text-align: center; z-index: 100; ">
+                            <span v-if="notify" style="padding: 10px; border-radius: 7px; font-weight: 700; background-color: rgb(71, 235, 66); color: #fafafa;">SAVED</span>
+                        </div>
+                        
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
