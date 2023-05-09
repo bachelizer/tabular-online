@@ -80,7 +80,7 @@ class ReportRepository implements IReport
         return $qry;
     }
 
-    public function individualJudgeScoring($eventId, $userId)
+    public function individualJudgeScoring($eventId, $userId, $gender)
     {
         $data = DB::select("select a.*, b.number, b.full_name participant_name, concat(c.criteria,' / ', c.percentage, '%') criteria, e.full_name judge_name, e.screen_name, 
         ((cast(c.percentage as float) / 100) * a.score) percent_score, total.total_score
@@ -99,7 +99,7 @@ class ReportRepository implements IReport
                         group by a.participant_id
                     order by a.participant_id
         ) total on total.participant_id = a.participant_id
-        where a.user_id = '$userId' and a.event_id = '$eventId'
+        where a.user_id = '$userId' and a.event_id = '$eventId' and b.gender = '$gender'
         order by total.total_score desc;");
 
         $result = collect($data)->groupBy(['participant_id'])
@@ -129,7 +129,7 @@ class ReportRepository implements IReport
         return User::with('role')->where('event_id', $eventId)->where('role_id', '!=', 2)->orderBy('full_name')->get();
     }
 
-    public function scoreSummary($eventId)
+    public function scoreSummary($eventId, $gender)
     {
         $data = DB::select("select a.*, c.number, c.full_name participant_name,
         sum((cast(b.percentage as float) / 100 * a.score)) percent_score, d.overall_score
@@ -145,7 +145,7 @@ class ReportRepository implements IReport
             where a.event_id = '$eventId'
             GROUP BY participant_id
         ) d on a.participant_id = d.participant_id
-        where a.event_id = '$eventId'
+        where a.event_id = '$eventId' and c.gender = '$gender'
         GROUP BY participant_id, a.user_id
         ORDER BY d.overall_score desc, a.participant_id;");
 

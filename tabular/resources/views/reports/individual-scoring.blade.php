@@ -41,66 +41,108 @@
         <span style="font-size: 12px;">Individual Judge Scoring</span>
     </div>
 
+    @if (count($male) > 0)
+    <div class="mt-20">
+        <h5>Male</h5>
+        <table width="100%" class="table" style="font-size: 11px;">
+            <thead>
+                <tr>
+                    <th rowspan="2">Participant No.</th>
+                    <th rowspan="2">Participants Name</th>
+                    <th colspan="{{ count($criteria) }}" style="text-align: center;"><strong>Criteria</strong></th>
+                    <th rowspan="2">Total Percentage Score</th>
+                    <th rowspan="2">Rank</th>
+                </tr>
+                <tr style="padding: 5px;">
+                    <?php foreach ($criteria as $row) : ?>
+                        <th><?= $row->criteria; ?>/ <?= $row->percentage; ?>%</th>
+                    <?php endforeach; ?>
+                </tr>
 
-    <table width="100%" class="table mt-20" style="font-size: 11px;">
-        <thead>
-            <tr>
-                <th rowspan="2">Participant No.</th>
-                <th rowspan="2">Participants Name</th>
-                <th colspan="{{ count($criteria) }}" style="text-align: center;"><strong>Criteria</strong></th>
-                <th rowspan="2">Total Percentage Score</th>
-                <th rowspan="2">Rank</th>
-            </tr>
-            <tr style="padding: 5px;">
-                <!-- <td></td> -->
-                <!-- <th>Full Name</th> -->
-                <?php foreach ($criteria as $row) : ?>
-                    <th><?= $row->criteria; ?>/ <?= $row->percentage; ?>%</th>
-                <?php endforeach; ?>
-                <!-- <th>Total</th>
-                <th>Rank</th> -->
-            </tr>
+            </thead>
+            <tbody>
+                @foreach ($male as $row )
+                <tr style="padding: 5px;">
+                    <td>{{ $row['number'] }}</td>
+                    <td>{{ $row['participant_name'] }}</td>
+                    @foreach ($criteria as $cri)
+                    @foreach ($row['scores'] as $scr)
+                    @if ($scr['criteria_id'] == $cri->id)
+                    <td>{{$scr['score']}}%</td>
+                    @endif
+                    @endforeach
+                    @endforeach
+                    <td style="text-align: center;"><strong>{{ $row['total_score']}} %</strong></td>
+                    <td style="text-align: center;"><strong style="color: red;">{{$loop->index + 1}}</strong></td>
+                </tr>
 
-        </thead>
-        <tbody>
-            @foreach ($participants as $row )
-            <tr style="padding: 5px;">
-                <td>{{ $row['number'] }}</td>
-                <td>{{ $row['participant_name'] }}</td>
-                @foreach ($criteria as $cri)
-                @foreach ($row['scores'] as $scr)
-                @if ($scr['criteria_id'] == $cri->id)
-                <td>{{$scr['score']}}%</td>
-                @endif
                 @endforeach
-                @endforeach
-                <td style="text-align: center;"><strong>{{ $row['total_score']}}</td>
-                <td style="text-align: center;"><strong style="color: red;">{{$loop->index + 1}}</strong></td>
-            </tr>
+            </tbody>
+        </table>
+    </div>
+    @endif
 
-            @endforeach
-        </tbody>
-    </table>
+    @if (count($female) > 0)
+    <div class="mt-20">
+        <h5>Female</h5>
+        <table width="100%" class="table" style="font-size: 11px;">
+            <thead>
+                <tr>
+                    <th rowspan="2">Participant No.</th>
+                    <th rowspan="2">Participants Name</th>
+                    <th colspan="{{ count($criteria) }}" style="text-align: center;"><strong>Criteria</strong></th>
+                    <th rowspan="2">Total Percentage Score</th>
+                    <th rowspan="2">Rank</th>
+                </tr>
+                <tr style="padding: 5px;">
+                    <?php foreach ($criteria as $row) : ?>
+                        <th><?= $row->criteria; ?>/ <?= $row->percentage; ?>%</th>
+                    <?php endforeach; ?>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach ($female as $row )
+                <tr style="padding: 5px;">
+                    <td>{{ $row['number'] }}</td>
+                    <td>{{ $row['participant_name'] }}</td>
+                    @foreach ($criteria as $cri)
+                    @foreach ($row['scores'] as $scr)
+                    @if ($scr['criteria_id'] == $cri->id)
+                    <td>{{$scr['score']}}%</td>
+                    @endif
+                    @endforeach
+                    @endforeach
+                    <td style="text-align: center;"><strong>{{ $row['total_score']}} %</strong></td>
+                    <td style="text-align: center;"><strong style="color: red;">{{$loop->index + 1}}</strong></td>
+                </tr>
+
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    @endif
+
     <div>
-      <table width="100%" class="mt-40">
-        <tr style="font-size: 12px;">
-            <td width="50%">
-               <u>{{ $user->full_name}}</u> 
-                <br>
-                Judge
-            </td>
-            <td width="50%">
-                ____________________
-                <br>
-                Event Coordinator
-            </td>
-        </tr>
-      </table>
+        <table width="100%" class="mt-40">
+            <tr style="font-size: 12px;">
+                <td width="50%">
+                    <u>{{ $user->full_name}}</u>
+                    <br>
+                    Judge
+                </td>
+                <td width="50%">
+                    ____________________
+                    <br>
+                    Event Coordinator
+                </td>
+            </tr>
+        </table>
     </div>
 
     <footer>
         <hr>
-        <span style="font-size: 13px; font-weight: bold;">ASSCAT at its BEST</span>  <br>
+        <span style="font-size: 13px; font-weight: bold;">ASSCAT at its BEST</span> <br>
         <i style="font-size: 10px; font-weight: bold;">Balance / Empowered / Selfless / Trustworthy</i>
 
         <div class="iso-logo">

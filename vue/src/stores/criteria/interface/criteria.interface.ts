@@ -3,7 +3,7 @@ export interface Criteria {
     event_id: number;
     criteria: string;
     percentage: number;
-    score: number;
+    score: number | '';
 }
 
 export interface CriteriaRequest {

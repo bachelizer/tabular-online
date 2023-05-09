@@ -63,10 +63,6 @@ const addTheScore = () => {
     });
 };
 
-const scoreRaw = (data: any) => {
-    return data ? data :'';
-}
-
 </script>
 
 <template>
@@ -100,7 +96,6 @@ const scoreRaw = (data: any) => {
                         <div style="text-align: center; z-index: 100; ">
                             <span v-if="notify" style="padding: 10px; border-radius: 7px; font-weight: 700; background-color: rgb(71, 235, 66); color: #fafafa;">SAVED</span>
                         </div>
-                        
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
