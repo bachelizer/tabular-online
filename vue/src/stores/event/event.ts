@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 import event from '../../helper/api/services/event.services';
+import subEvent from '../../helper/api/services/subEvent.service'
 import type { Event, EventRequest } from './interface/event.interface';
 
 export const eventStore = defineStore('eventStore', {
@@ -8,6 +9,8 @@ export const eventStore = defineStore('eventStore', {
         return {
             events: [] as Event[],
             event: null as Event | null,
+            subEvent: {},
+            subEvents:[]
         };
     },
     actions: {
@@ -29,6 +32,23 @@ export const eventStore = defineStore('eventStore', {
         },
         async updateEvent(payload: EventRequest) {
             await event.updateEvent(payload)
+        },
+        async createSubEvent(payload: any) {
+            await subEvent.createSubEvent(payload)
+        },
+        async fetchSubEvents(eventId: number) {
+            const {data} = await subEvent.fetchSubEvents(eventId)
+            this.subEvents = data
+        },
+        async showSubEvent(subEventId: number) {
+            await subEvent.showSubEvent(subEventId)
+        },
+        async createSubEventCriteria(payload: any) {
+            await subEvent.createSubEventCriteria(payload)
+        },
+        async getSubEventCriteria(id: number) {
+            const {data} = await subEvent.getSubEventCriteria(id)
+            this.subEvent = data
         }
     },
     getters: {}

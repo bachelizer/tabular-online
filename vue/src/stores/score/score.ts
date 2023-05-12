@@ -23,9 +23,13 @@ export const scoreStore = defineStore('scoreStore', {
         async createScore(payload: ScoreRequest) {
             await score.createScore(payload);
         },
-        async getParticipantScore(participantId: number) {
+
+        async createSubScore(payload: ScoreRequest) {
+            await score.createSubEventCriteriaScore(payload);
+        },
+        async getParticipantScore(participantId: number, subEventId: number) {
             const userId = auth.userAccount?.id;
-            const { data } = await score.getParticipantScore(participantId, Number(userId));
+            const { data } = await score.getParticipantScore(participantId, Number(userId), subEventId);
             this.scores = data
         },
         async getParticipantsTotalScore(eventId: number) {

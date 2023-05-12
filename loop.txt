@@ -1,0 +1,25 @@
+<!--  @foreach ($row->participants as $participant)
+                <tr style="padding: 5px;">
+                    <td>{{ $participant['number'] }}</td>
+                    <td>{{ $participant['full_name'] }}</td>
+                    @foreach ($criteria as $cri)
+
+                    @foreach ($participant['scores'] as $scr)
+
+                    @if ($scr['sub_criteria_id'] == $cri->id)
+                    <td>{{$scr['criteria_score']}}%</td>
+                    <td style="text-align: center;"><strong>{{ $scr['sub_event_total_score']}} %</strong></td>
+                    @endif
+                    @endforeach
+                    @endforeach
+                    
+                    <td style="text-align: center;"><strong style="color: red;">{{$loop->index + 1}}</strong></td>
+                </tr>
+
+                @endforeach -->
+
+
+
+                    <?php foreach ($criteria as $row) : ?>
+                        <th><?= $row->criteria; ?>/ <?= $row->percentage; ?>%</th>
+                    <?php endforeach; ?>

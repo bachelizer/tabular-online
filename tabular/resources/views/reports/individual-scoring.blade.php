@@ -41,87 +41,103 @@
         <span style="font-size: 12px;">Individual Judge Scoring</span>
     </div>
 
-    @if (count($male) > 0)
     <div class="mt-20">
-        <h5>Male</h5>
+        @if (count($male) > 0)
+        <h4>Male</h4>
+        @foreach ($male as $row)
+        <h5 class="mt-10">{{ $row['sub_event_name']}} | {{ $row['sub_event_percent']}}</h5>
         <table width="100%" class="table" style="font-size: 11px;">
             <thead>
                 <tr>
                     <th rowspan="2">Participant No.</th>
                     <th rowspan="2">Participants Name</th>
-                    <th colspan="{{ count($criteria) }}" style="text-align: center;"><strong>Criteria</strong></th>
+                    <th colspan="{{ count(array_filter($criteria, function($c) use ($row) { return $c->sub_event_id == $row['sub_event_id']; })) }}" style="text-align: center;"><strong>Criteria</strong></th>
                     <th rowspan="2">Total Percentage Score</th>
                     <th rowspan="2">Rank</th>
                 </tr>
                 <tr style="padding: 5px;">
-                    <?php foreach ($criteria as $row) : ?>
-                        <th><?= $row->criteria; ?>/ <?= $row->percentage; ?>%</th>
+                    <?php foreach (array_filter($criteria, function ($c) use ($row) {
+                        return $c->sub_event_id == $row['sub_event_id'];
+                    }) as $data) : ?>
+                        <th><?= $data->criteria; ?>/ <?= $data->percentage; ?>% </th>
                     <?php endforeach; ?>
                 </tr>
-
             </thead>
             <tbody>
-                @foreach ($male as $row )
+
+                @foreach ($row['participants'] as $participant)
                 <tr style="padding: 5px;">
-                    <td>{{ $row['number'] }}</td>
-                    <td>{{ $row['participant_name'] }}</td>
+                    <td>{{ $participant['number'] }}</td>
+                    <td>{{ $participant['full_name'] }}</td>
                     @foreach ($criteria as $cri)
-                    @foreach ($row['scores'] as $scr)
-                    @if ($scr['criteria_id'] == $cri->id)
-                    <td>{{$scr['score']}}%</td>
+                    @foreach ($participant['scores'] as $scr)
+                    @if ($scr['sub_criteria_id'] == $cri->id)
+                    <td>{{$scr['criteria_score']}}%</td>
+
                     @endif
                     @endforeach
                     @endforeach
-                    <td style="text-align: center;"><strong>{{ $row['total_score']}} %</strong></td>
+                    <td style="text-align: center;"><strong>{{ $participant['sub_event_total_score']}} %</strong></td>
                     <td style="text-align: center;"><strong style="color: red;">{{$loop->index + 1}}</strong></td>
                 </tr>
 
                 @endforeach
-            </tbody>
-        </table>
-    </div>
-    @endif
 
-    @if (count($female) > 0)
-    <div class="mt-20">
-        <h5>Female</h5>
+            </tbody>
+
+        </table>
+        @endforeach
+        <hr class="mt-20"/>
+        @endif
+
+        @if (count($female) > 0)
+        <h4 class="mt-20">Female</h4>
+        @foreach ($female as $row)
+        <h5 class="mt-10">{{ $row['sub_event_name']}} | {{ $row['sub_event_percent']}}</h5>
         <table width="100%" class="table" style="font-size: 11px;">
             <thead>
                 <tr>
                     <th rowspan="2">Participant No.</th>
                     <th rowspan="2">Participants Name</th>
-                    <th colspan="{{ count($criteria) }}" style="text-align: center;"><strong>Criteria</strong></th>
+                    <th colspan="{{ count(array_filter($criteria, function($c) use ($row) { return $c->sub_event_id == $row['sub_event_id']; })) }}" style="text-align: center;"><strong>Criteria</strong></th>
                     <th rowspan="2">Total Percentage Score</th>
                     <th rowspan="2">Rank</th>
                 </tr>
                 <tr style="padding: 5px;">
-                    <?php foreach ($criteria as $row) : ?>
-                        <th><?= $row->criteria; ?>/ <?= $row->percentage; ?>%</th>
+                    <?php foreach (array_filter($criteria, function ($c) use ($row) {
+                        return $c->sub_event_id == $row['sub_event_id'];
+                    }) as $data) : ?>
+                        <th><?= $data->criteria; ?>/ <?= $data->percentage; ?>% </th>
                     <?php endforeach; ?>
                 </tr>
-
             </thead>
             <tbody>
-                @foreach ($female as $row )
+
+                @foreach ($row['participants'] as $participant)
                 <tr style="padding: 5px;">
-                    <td>{{ $row['number'] }}</td>
-                    <td>{{ $row['participant_name'] }}</td>
+                    <td>{{ $participant['number'] }}</td>
+                    <td>{{ $participant['full_name'] }}</td>
                     @foreach ($criteria as $cri)
-                    @foreach ($row['scores'] as $scr)
-                    @if ($scr['criteria_id'] == $cri->id)
-                    <td>{{$scr['score']}}%</td>
+                    @foreach ($participant['scores'] as $scr)
+                    @if ($scr['sub_criteria_id'] == $cri->id)
+                    <td>{{$scr['criteria_score']}}%</td>
+
                     @endif
                     @endforeach
                     @endforeach
-                    <td style="text-align: center;"><strong>{{ $row['total_score']}} %</strong></td>
+                    <td style="text-align: center;"><strong>{{ $participant['sub_event_total_score']}} %</strong></td>
                     <td style="text-align: center;"><strong style="color: red;">{{$loop->index + 1}}</strong></td>
                 </tr>
 
                 @endforeach
+
             </tbody>
+
         </table>
+        @endforeach
+        @endif
+
     </div>
-    @endif
 
     <div>
         <table width="100%" class="mt-40">

@@ -9,4 +9,5 @@ interface IReport
     public function getScoringJudge($eventId);
     public function individualJudgeScoring($eventId, $userId, $gender);
     public function scoreSummary($eventId, $gender);
+    public function scoreSummary2($eventId, $gender);
 }

@@ -46,7 +46,7 @@ const submitHandler = () => {
                                 <v-text-field label="Full Name" :readonly="!showBtnSave" v-model="req.full_name" required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="2" md="2">
-                                <v-select :items="['Male', 'Female', 'None']" label="Gender" v-model="req.gender">
+                                <v-select :items="['Male', 'Female']" label="Gender" v-model="req.gender">
 
                                 </v-select>
                             </v-col>

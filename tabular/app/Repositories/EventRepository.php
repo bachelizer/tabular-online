@@ -53,6 +53,7 @@ class EventRepository implements IEvent
         $event->criterias;
         $event->users;
         $event->participants;
+        $event->subEvents;
         return $event;
     }
 }
