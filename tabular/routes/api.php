@@ -11,6 +11,9 @@ use App\Http\Controllers\CriteriaController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SubEventController;
+use App\Http\Controllers\SubEventCriteriaController;
+use App\Http\Controllers\SubEventScoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,4 +65,22 @@ Route::post('/auth', [AuthController::class, 'signIn']);
 Route::post('/report/{eventId}', [ReportController::class, 'getScores']);
 Route::post('/report/judges-scoring/{eventId}', [ReportController::class, 'getScoringJudge']);
 Route::get('/report/individual-scoring/{eventId}/{userId}', [ReportController::class, 'individualJudgeScoring']);
-Route::get('/report/score-summary/{eventId}', [ReportController::class, 'scoreSummary']);
+Route::get('/report/score-summary/{eventId}', [ReportController::class, 'scoreSummary2']);
+// Route::get('/report/score-summary/{eventId}', [ReportController::class, 'scoreSummary']);
+
+// sub-event
+Route::get('/event/sub-event/{eventId}', [SubEventController::class, 'fetch']);
+Route::post('/event/sub-event', [SubEventController::class, 'store']);
+Route::put('/event/sub-event/{id}', [SubEventController::class, 'update']);
+Route::get('/event/sub-event/show/{id}', [SubEventController::class, 'show']);
+
+// sub-event criteria
+Route::get('/sub-event/s-c/{subEventId}', [SubEventCriteriaController::class, 'fetch']);
+Route::post('/sub-event/s-c', [SubEventCriteriaController::class, 'store']);
+Route::put('/sub-event/s-c/{id}', [SubEventCriteriaController::class, 'update']);
+// Route::get('/sub-event/s-c/{id}', [SubeEventCriteriaController::class, 'show']);
+Route::delete('/sub-event/s-c/show/{id}', [SubEventCriteriaController::class, 'destroy']);
+
+// sub-event score
+Route::get('/sub-criteria-scoring/{participantId}/{userId}/{subEventId}', [SubEventScoreController::class, 'show']);
+Route::post('/sub-criteria-scoring', [SubEventScoreController::class, 'store']);

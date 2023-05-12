@@ -20,6 +20,12 @@ use App\Repositories\Interfaces\IScore;
 use App\Repositories\ScoreRepository;
 use App\Repositories\Interfaces\IAuth;
 use App\Repositories\AuthRepository;
+use App\Repositories\Interfaces\ISubEvent;
+use App\Repositories\SubEventRepository;
+use App\Repositories\Interfaces\ISubEventCriteria;
+use App\Repositories\SubEventCriteriaRepository;
+use App\Repositories\Interfaces\ISubScore;
+use App\Repositories\SubEventScoreRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -31,6 +37,8 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        $this->app->bind(ISubScore::class, SubEventScoreRepository::class);
+        $this->app->bind(ISubEvent::class, SubEventRepository::class);
         $this->app->bind(IReport::class, ReportRepository::class);
         $this->app->bind(IEvent::class, EventRepository::class);
         $this->app->bind(IParticipant::class, ParticipantRepository::class);
@@ -39,6 +47,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ICriteria::class, CriteriaRepository::class);
         $this->app->bind(IScore::class, ScoreRepository::class);
         $this->app->bind(IAuth::class, AuthRepository::class);
+        $this->app->bind(ISubEventCriteria::class, SubEventCriteriaRepository::class);
     }
 
     /**

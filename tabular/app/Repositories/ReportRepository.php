@@ -82,45 +82,112 @@ class ReportRepository implements IReport
 
     public function individualJudgeScoring($eventId, $userId, $gender)
     {
-        $data = DB::select("select a.*, b.number, b.full_name participant_name, concat(c.criteria,' / ', c.percentage, '%') criteria, e.full_name judge_name, e.screen_name, 
-        ((cast(c.percentage as float) / 100) * a.score) percent_score, total.total_score
-        from scores a
-        join participants b on a.participant_id = b.id
-        join criterias c on c.id = a.criteria_id
-        join `events` d on d.id = a.event_id
-        join users e on a.user_id = e.id 
-        left join (
-                    select a.participant_id,
-                    sum((cast(c.percentage as float) / 100) * a.score) total_score
-                    from scores a
-                    join criterias c on c.id = a.criteria_id
-                    join users e on a.user_id = e.id 
-                    where a.user_id = '$userId' and a.event_id = '$eventId'
-                        group by a.participant_id
-                    order by a.participant_id
-        ) total on total.participant_id = a.participant_id
-        where a.user_id = '$userId' and a.event_id = '$eventId' and b.gender = '$gender'
-        order by total.total_score desc;");
+        $data = DB::select("SELECT a.`sub_event_id`,a.sub_criteria_id, a.`participant_id`,a.`user_id`, a.event_id, b.`full_name`, b.`number`, c.`criteria`, c.`percentage` sub_criteria_percent, d.`sub_event_name`, d.`percentage` sub_event_percent
+        , ((CAST(c.percentage AS FLOAT) / 100) * a.score) criteria_score, total.sub_event_total_score
+        FROM sub_event_scores a
+        JOIN participants b ON a.participant_id = b.id
+        JOIN sub_event_criterias c ON c.id = a.sub_criteria_id
+        JOIN `sub_events` d ON d.id = a.sub_event_id
+        JOIN users e ON a.user_id = e.id 
+        LEFT JOIN (
+                            SELECT a.participant_id, a.`sub_criteria_id`, a.sub_event_id,
+                            ROUND(SUM((CAST(c.percentage AS FLOAT) / 100) * a.score),2) sub_event_total_score
+                            FROM sub_event_scores a
+                            JOIN sub_event_criterias c ON c.id = a.sub_criteria_id
+                            JOIN users e ON a.user_id = e.id 
+                            WHERE a.user_id = '$userId' AND a.event_id = '$eventId'
+                            GROUP BY a.participant_id, a.sub_event_id 
+                            ORDER BY a.participant_id, a.`sub_criteria_id` 
+                            
+        ) total ON total.participant_id = a.participant_id AND a.sub_event_id = total.sub_event_id
+        
+        WHERE a.user_id = '$userId' AND a.event_id = '$eventId' AND b.gender = '$gender'
+        GROUP BY a.`participant_id`, a.`sub_criteria_id`
+        ORDER BY total.sub_event_total_score DESC;");
 
-        $result = collect($data)->groupBy(['participant_id'])
+        /* $result = collect($data)->groupBy(['participant_id'])
             ->map(function ($grouped) {
                 $scores = $grouped->map(function ($item) {
                     return [
-                        'criteria_id' => $item->criteria_id,
+                        'sub_event_id' => $item->sub_event_id,
+                        'sub_criteria_id' => $item->sub_criteria_id,
                         'criteria' => $item->criteria,
-                        'score' => $item->percent_score
+                        'criteria_score' => $item->criteria_score
                     ];
                 });
                 return [
                     'number' => $grouped[0]->number,
                     'participant_id' => $grouped[0]->participant_id,
-                    'participant_name' => $grouped[0]->participant_name,
-                    'total_score' => $grouped[0]->total_score,
+                    'participant_name' => $grouped[0]->full_name,
+                    'total_score' => $grouped[0]->sub_event_total_score,
+                    'sub_event_name' =>$grouped[0]->sub_event_name,
                     'scores' => $scores->toArray()
                 ];
             })
             ->values()
             ->toArray();
+        return $data; */
+
+        $result = array_reduce($data, function ($acc, $item) {
+            $subEventId = $item->sub_event_id;
+            $participantId = $item->participant_id;
+            $subCriteriaId = $item->sub_criteria_id;
+
+            // create sub-event group if not exist
+            if (!isset($acc[$subEventId])) {
+                $acc[$subEventId] = [
+                    'sub_event_id' => $subEventId,
+                    'user_id' => $item->user_id,
+                    'sub_event_name' => $item->sub_event_name,
+                    'sub_event_percent' => $item->sub_event_percent,
+                    // 'sub_event_total_score' => $item->sub_event_total_score,
+                    'participants' => [],
+                ];
+            }
+
+            // get sub-event group
+            $subEventGroup = &$acc[$subEventId];
+
+            // create participant group if not exist
+            $participantKey = array_search($participantId, array_column($subEventGroup['participants'], 'participant_id'));
+            if ($participantKey === false) {
+                $participantKey = count($subEventGroup['participants']);
+                $subEventGroup['participants'][$participantKey] = [
+                    'participant_id' => $participantId,
+                    'full_name' => $item->full_name,
+                    'number' => $item->number,
+                    'sub_event_total_score' => $item->sub_event_total_score,
+                    'scores' => [],
+                ];
+            }
+
+            // get participant group
+            $participantGroup = &$subEventGroup['participants'][$participantKey];
+
+            // create score group if not exist
+            $scoreKey = array_search($subCriteriaId, array_column($participantGroup['scores'], 'sub_criteria_id'));
+            if ($scoreKey === false) {
+                $scoreKey = count($participantGroup['scores']);
+                $participantGroup['scores'][$scoreKey] = [
+                    'sub_criteria_id' => $subCriteriaId,
+                    'criteria' => $item->criteria,
+                    'criteria_score' => $item->criteria_score,
+                    'sub_criteria_percent' => $item->sub_criteria_percent,
+                ];
+            }
+
+            return $acc;
+        }, []);
+
+        // convert associative array to indexed array
+        $result = array_values($result);
+        foreach ($result as &$subEventGroup) {
+            $subEventGroup['participants'] = array_values($subEventGroup['participants']);
+            foreach ($subEventGroup['participants'] as &$participantGroup) {
+                $participantGroup['scores'] = array_values($participantGroup['scores']);
+            }
+        }
+
         return $result;
     }
 
@@ -178,7 +245,7 @@ class ReportRepository implements IReport
 
         foreach ($result as &$item) {
             if ($item['overall_score'] !== $lastScore) {
-                $rank = $item['rank'] = $rank+1;
+                $rank = $item['rank'] = $rank + 1;
             } else {
                 $item['rank'] = $rank;
             }
@@ -186,5 +253,82 @@ class ReportRepository implements IReport
         }
 
         return $result;
+    }
+
+    public function scoreSummary2($eventId, $gender)
+    {
+        $finalScore = DB::select("SELECT par.participant_id, SUM(par.criteria_score) over_all_total FROM 
+                (
+                    SELECT a.`sub_event_id`, a.`participant_id`,a.`user_id`, a.event_id, b.`full_name`, b.`number`, c.`criteria`, c.`percentage` sub_criteria_percent, d.`sub_event_name`, d.`percentage` sub_event_percent
+                    , ((CAST(d.percentage AS FLOAT) / 100) * a.score) criteria_score
+                    FROM sub_event_scores a
+                    JOIN participants b ON a.participant_id = b.id
+                    JOIN sub_event_criterias c ON c.id = a.sub_criteria_id
+                    JOIN `sub_events` d ON d.id = a.sub_event_id
+                    JOIN users e ON a.user_id = e.id
+                    WHERE a.event_id = '$eventId' AND b.gender = '$gender'
+                    GROUP BY a.`participant_id`, a.`sub_event_id`
+                ) par GROUP BY par.`participant_id`
+                ORDER BY par.criteria_score DESC;");
+
+        $byParticipants = DB::select("
+                    SELECT a.`sub_event_id`, a.`participant_id`,a.`user_id`, a.event_id, b.`full_name`, b.`number`, c.`criteria`, c.`percentage` sub_criteria_percent, d.`sub_event_name`, d.`percentage` sub_event_percent
+                , ((CAST(d.percentage AS FLOAT) / 100) * a.score) criteria_score
+                FROM sub_event_scores a
+                JOIN participants b ON a.participant_id = b.id
+                JOIN sub_event_criterias c ON c.id = a.sub_criteria_id
+                JOIN `sub_events` d ON d.id = a.sub_event_id
+                JOIN users e ON a.user_id = e.id
+                WHERE a.event_id = '$eventId' AND b.gender = '$gender'
+                GROUP BY a.`participant_id`, a.`sub_event_id`;");
+
+
+        $participants = collect($byParticipants)->groupBy(['participant_id'])
+            ->map(function ($grouped) {
+                $scores = $grouped->map(function ($item) {
+                    return [
+                        'sub_event_id' => $item->sub_event_id,
+                        'sub_event_name' => $item->sub_event_name,
+                        'sub_event_score' => $item->criteria_score
+                    ];
+                });
+                return [
+                    'participant_id' => $grouped[0]->participant_id,
+                    'number' => $grouped[0]->number,
+                    'participant_name' => $grouped[0]->full_name,
+                    // 'overall_score' => $grouped[0]->overall_score,
+                    'scores' => $scores->toArray()
+                ];
+            })
+            ->values()
+            ->toArray();
+
+
+        foreach ($participants as &$participant) {
+            foreach ($finalScore as $score) {
+                if ($score->participant_id === $participant['participant_id']) {
+                    $participant['over_all_total'] = $score->over_all_total;
+                    break;
+                }
+            }
+        }
+
+        unset($participant);
+
+        $rank = 0;
+        $lastScore = null;
+
+        foreach ($participants as &$item) {
+            if ($item['over_all_total'] !== $lastScore) {
+                $rank = $item['rank'] = $rank + 1;
+            } else {
+                $item['rank'] = $rank;
+            }
+            $lastScore = $item['over_all_total'];
+        }
+
+        // return $result;
+
+        return $participants;
     }
 }

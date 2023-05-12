@@ -41,21 +41,21 @@
         <span style="font-size: 12px;">Score Summary</span>
     </div>
 
-    @if (count($male) > 0)
     <div class="mt-10">
+        @if (count($male) > 0)
         <h5>Male</h5>
         <table width="100%" class="table mt-5" style="font-size: 11px;">
             <thead>
                 <tr>
                     <th rowspan="2">Participant No.</th>
                     <th rowspan="2">Participants Name</th>
-                    <th colspan="{{ count($users) }}" style="text-align: center;"><strong>Judges</strong></th>
+                    <th colspan="{{ count($subEvents) }}" style="text-align: center;"><strong>Sub Events</strong></th>
                     <th rowspan="2">Total Average Score</th>
                     <th rowspan="2">Rank</th>
                 </tr>
                 <tr style="padding: 5px;">
-                    <?php foreach ($users as $row) : ?>
-                        <th><?= $row->full_name; ?></th>
+                    <?php foreach ($subEvents as $sub) : ?>
+                        <th><?= $sub->sub_event_name; ?> | <?= $sub->percentage; ?>%</th>
                     <?php endforeach; ?>
                 </tr>
 
@@ -65,38 +65,36 @@
                 <tr style="padding: 5px;">
                     <td>{{ $row['number'] }}</td>
                     <td>{{ $row['participant_name'] }}</td>
-                    @foreach ($users as $user)
+                    @foreach ($subEvents as $sub)
                     @foreach ($row['scores'] as $scr)
-                    @if ($scr['user_id'] == $user->id)
-                    <td>{{$scr['score']}}%</td>
+                    @if ($scr['sub_event_id'] == $sub->id)
+                    <td>{{$scr['sub_event_score']}}%</td>
                     @endif
                     @endforeach
                     @endforeach
-                    <td style="text-align: center;"><strong>{{ $row['overall_score']}} % </strong></td>
-                    <td style="text-align: center;"><strong style="color: red;">{{$row['rank']}}</strong></td>
+                    <td style="text-align: center;"><strong>{{ $row['over_all_total']}} % </strong></td>
+                    <td style="text-align: center;"><strong style="color: red;">{{ $row['rank'] }}</strong></td>
                 </tr>
 
                 @endforeach
             </tbody>
         </table>
-    </div>
+        @endif
 
-    @endif
-    @if (count($female) > 0)
-    <div class="mt-20">
-        <h5>Female</h5>
+        @if (count($female) > 0)
+        <h5 class="mt-10">Female</h5>
         <table width="100%" class="table mt-5" style="font-size: 11px;">
             <thead>
                 <tr>
                     <th rowspan="2">Participant No.</th>
                     <th rowspan="2">Participants Name</th>
-                    <th colspan="{{ count($users) }}" style="text-align: center;"><strong>Judges</strong></th>
+                    <th colspan="{{ count($subEvents) }}" style="text-align: center;"><strong>Sub Events</strong></th>
                     <th rowspan="2">Total Average Score</th>
                     <th rowspan="2">Rank</th>
                 </tr>
                 <tr style="padding: 5px;">
-                    <?php foreach ($users as $row) : ?>
-                        <th><?= $row->full_name; ?></th>
+                    <?php foreach ($subEvents as $sub) : ?>
+                        <th><?= $sub->sub_event_name; ?> | <?= $sub->percentage; ?>%</th>
                     <?php endforeach; ?>
                 </tr>
 
@@ -106,24 +104,22 @@
                 <tr style="padding: 5px;">
                     <td>{{ $row['number'] }}</td>
                     <td>{{ $row['participant_name'] }}</td>
-                    @foreach ($users as $user)
+                    @foreach ($subEvents as $sub)
                     @foreach ($row['scores'] as $scr)
-                    @if ($scr['user_id'] == $user->id)
-                    <td>{{$scr['score']}}%</td>
+                    @if ($scr['sub_event_id'] == $sub->id)
+                    <td>{{$scr['sub_event_score']}}%</td>
                     @endif
                     @endforeach
                     @endforeach
-                    <td style="text-align: center;"><strong>{{ $row['overall_score']}} %</strong></td>
-                    <td style="text-align: center;"><strong style="color: red;">{{$row['rank']}}</strong></td>
+                    <td style="text-align: center;"><strong>{{ $row['over_all_total']}} % </strong></td>
+                    <td style="text-align: center;"><strong style="color: red;">{{ $row['rank'] }}</strong></td>
                 </tr>
 
                 @endforeach
             </tbody>
         </table>
+        @endif
     </div>
-
-    @endif
-
     <div>
         <table width="100%" class="mt-40 mt-20">
             <tbody>

@@ -9,7 +9,9 @@ export interface ScoreRequest {
 export interface Score {
     id: number;
     participant_id: number;
-    criteria_id: number;
+    sub_event_id: number,
+    // criteria_id: number;
+    sub_criteria_id: number,
     score: number;
     user_id: number;
     event_id: number;

@@ -5,7 +5,8 @@ import { storeToRefs } from 'pinia';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 import ParticipantsView from '@/views/event/components/participants/ParticipantsView.vue';
 import UsersView from './components/users/UsersView.vue';
-import CriteriaView from './components/criteria/CriteriaView.vue';
+// import CriteriaView from './components/criteria/CriteriaView.vue';
+import SubEvent from './components/sub-events/SubEvent.vue';
 import ScoreBoard from './components/score-board/ScoreBoard.vue';
 import { useRoute } from 'vue-router';
 
@@ -32,10 +33,11 @@ let tabs = ref(null);
                 </v-col>
 
                 <v-tabs v-model="tabs" fixed-tabs bg-color="indigo-darken-2">
-                    <v-tab value="score-board"> Score Board </v-tab>
+                    <v-tab value="score-board"> Generation of Result </v-tab>
                     <v-tab value="participants"> Participants </v-tab>
                     <v-tab value="users"> Users </v-tab>
-                    <v-tab value="criteria"> Criteria </v-tab>
+                    <!-- <v-tab value="criteria"> Criteria </v-tab> -->
+                    <v-tab value="sub-events"> Sub Events </v-tab>
                 </v-tabs>
                 <v-window v-model="tabs">
                     <v-window-item value="score-board">
@@ -52,9 +54,14 @@ let tabs = ref(null);
                             <UsersView/>
                         </v-card>
                     </v-window-item>
-                    <v-window-item value="criteria">
+                   <!--  <v-window-item value="criteria">
                         <v-card>
                             <CriteriaView :criterias="event?.criterias"/>
+                        </v-card>
+                    </v-window-item> -->
+                    <v-window-item value="sub-events">
+                        <v-card>
+                            <SubEvent :subEvents="event.sub_events"/>
                         </v-card>
                     </v-window-item>
                 </v-window>

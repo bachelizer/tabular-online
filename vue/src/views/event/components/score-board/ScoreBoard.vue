@@ -57,7 +57,7 @@ onMounted(async () => {
         <v-btn class="mx-2" color="primary" size="small" @click="generateJudgesScoringResult">judges scoring</v-btn>
         <!-- <v-btn class="mx-2" color="primary" size="small">report 3</v-btn> -->
     </v-col>
-    <v-table fixed-header height="300px">
+    <!-- <v-table fixed-header height="300px">
         <thead>
             <tr>
                 <th class="text-left">Number</th>
@@ -84,5 +84,5 @@ onMounted(async () => {
                 <td><strong style="color: red;">{{ participant.percent_score[0].total_percent_score }} %</strong></td>
             </tr>
         </tbody>
-    </v-table>
+    </v-table> -->
 </template>
