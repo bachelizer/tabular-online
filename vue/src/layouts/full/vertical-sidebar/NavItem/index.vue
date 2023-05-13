@@ -1,6 +1,8 @@
 <script setup>
 import Icon from '../Icon.vue';
 import { authStore } from '@/stores/auth/auth';
+import { ApertureIcon } from 'vue-tabler-icons';
+import { RouterLink } from 'vue-router';
 
 const useAuthStore = authStore();
 const { userAccount } = useAuthStore;
@@ -41,4 +43,15 @@ const props = defineProps({ item: Object, level: Number });
             </v-chip>
         </template>
     </v-list-item>
-</template>
+
+    <!-- <v-list-item
+        to="/announcement-activity"
+        rounded
+        class="mb-1"
+        active-color="primary"
+    >
+        <template v-slot:prepend>
+            <Icon :item="ApertureIcon"/>
+        </template>
+        <v-list-item-title>Announcement And Activity</v-list-item-title>
+    </v-list-item> --></template>

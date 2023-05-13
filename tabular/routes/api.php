@@ -14,6 +14,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubEventController;
 use App\Http\Controllers\SubEventCriteriaController;
 use App\Http\Controllers\SubEventScoreController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ActivityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,3 +86,9 @@ Route::delete('/sub-event/s-c/show/{id}', [SubEventCriteriaController::class, 'd
 // sub-event score
 Route::get('/sub-criteria-scoring/{participantId}/{userId}/{subEventId}', [SubEventScoreController::class, 'show']);
 Route::post('/sub-criteria-scoring', [SubEventScoreController::class, 'store']);
+
+//announcement
+Route::apiResource('announcement', AnnouncementController::class);
+
+//activity
+Route::apiResource('activity', ActivityController::class);

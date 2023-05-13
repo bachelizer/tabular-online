@@ -26,6 +26,10 @@ use App\Repositories\Interfaces\ISubEventCriteria;
 use App\Repositories\SubEventCriteriaRepository;
 use App\Repositories\Interfaces\ISubScore;
 use App\Repositories\SubEventScoreRepository;
+use App\Repositories\Interfaces\IAnnouncement;
+use App\Repositories\AnnouncementRepository;
+use App\Repositories\Interfaces\IActivity;
+use App\Repositories\ActivitiesRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -37,6 +41,8 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        $this->app->bind(IActivity::class, ActivitiesRepository::class);
+        $this->app->bind(IAnnouncement::class, AnnouncementRepository::class);
         $this->app->bind(ISubScore::class, SubEventScoreRepository::class);
         $this->app->bind(ISubEvent::class, SubEventRepository::class);
         $this->app->bind(IReport::class, ReportRepository::class);

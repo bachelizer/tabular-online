@@ -46,6 +46,11 @@ const MainRoutes = {
             path: '/judge',
             component: () => import('@/views/judge/MyEvent.vue')
         },
+        {
+            name: 'AnnouncementAndActivity',
+            path: '/announcement-activity',
+            component: () => import('@/views/announcement-activity/Index.vue')
+        },
     ]
 };
 

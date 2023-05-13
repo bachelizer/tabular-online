@@ -67,6 +67,18 @@ const sidebarItem: menu[] = [
         icon: ApertureIcon,
         to: '/judge',
         userRole: 'Judge'
+    },
+    {
+        title: 'Announcement And Activity',
+        icon: ApertureIcon,
+        to: '/announcement-activity',
+        userRole: 'Admin'
+    },
+    {
+        title: 'Announcement And Activity',
+        icon: ApertureIcon,
+        to: '/announcement-activity',
+        userRole: 'Judge'
     }
 ];
 
